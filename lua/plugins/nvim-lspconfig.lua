@@ -87,25 +87,60 @@ return {
         })
         lspconfig.pyright.setup({})
         lspconfig.ts_ls.setup({})
+
         lspconfig.rust_analyzer.setup({
             on_attach = function(_, bufnr)
+                local should_enable_inlay_hint = true;
+
+                vim.keymap.set("n", "<leader>li", function()
+                    vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
+                    should_enable_inlay_hint = not should_enable_inlay_hint
+                end, {buffer = bufnr, desc = "Toggle inlay hints"})
+
+                -- Enable inlay hints on attach to LSP server.
                 vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+
+                -- Disable inlay hints when entering insert mode to avoid cursor hopping. Re-enable on leaving insert mode.
+                vim.api.nvim_create_autocmd({ "InsertEnter" }, {
+                    pattern = { "*.rs" },
+                    callback = function()
+                        vim.lsp.inlay_hint.enable(false, { bufnr = bufnr })
+                    end,
+                })
+                vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+                    pattern = { "*.rs" },
+                    callback = function()
+                        -- Only re-enable if inlay hints have not been explicitly disabled
+                        if should_enable_inlay_hint then
+                            vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+                        end
+                    end,
+                })
             end,
             settings = {
                 ["rust-analyzer"] = {
-                    imports = {
-                        granularity = {
-                            group = "module",
-                        },
-                        prefix = "self",
-                    },
                     cargo = {
+                        features = "all",
                         buildScripts = {
                             enable = true,
                         },
                         procMacro = {
                             enable = true,
                         },
+                    },
+                    completion = {
+                        autoImport = true,
+                        enable = true,
+                    },
+                    diagnostics = {
+                        enable = true,
+                    },
+                    imports = {
+                        granularity = {
+                            enforce = true,
+                            group = "module",
+                        },
+                        prefix = "self",
                     },
                 },
             },

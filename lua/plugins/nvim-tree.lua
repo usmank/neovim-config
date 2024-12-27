@@ -6,6 +6,16 @@ return {
     },
     opts = function()
         return {
+            diagnostics = {
+                enable = true,
+                show_on_dirs = true,
+                icons = {
+                    error   = "",
+                    warning = "",
+                    hint    = "󰌶",
+                    info    = "",
+                },
+            },
             view = {
                 adaptive_size = true,
                 cursorline = false,

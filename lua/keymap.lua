@@ -28,7 +28,7 @@ map("n", "<C-w>z", "<C-w><Bar><C-w>_", default_opts("Maximize current split"))
 map("n", "<leader>si", "vip:sort<CR>", default_opts("Sort lines in paragraph"))
 
 -- Toggle list chars
-map("n", "<leader>l", ":set list!<CR>", default_opts("Toggle list chars"))
+map("n", "<leader>ll", ":set list!<CR>", default_opts("Toggle list chars"))
 
 -- Make search more magical
 map("n", "/", "/\\v", default_opts())

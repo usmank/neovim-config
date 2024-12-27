@@ -5,6 +5,9 @@ return {
         "Outline",
         "OutlineOpen",
     },
+    dependencies = {
+        "nvim-lspconfig",
+    },
     opts = function()
         return {
             symbol_folding = {

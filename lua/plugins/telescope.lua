@@ -31,6 +31,11 @@ return {
                     "--trim"
                 }
             },
+            pickers = {
+                buffers = {
+                    sort_lastused = true,
+                },
+            },
         }
     end,
 }
